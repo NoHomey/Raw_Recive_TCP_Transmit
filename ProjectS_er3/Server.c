@@ -23,15 +23,19 @@ int main(void) {
                 }
             } else {
                 perror("Error while accepting socket\n");
-                return 1;
+                goto close_sockets;
             }
         } else {
             perror("Error while binding socket\n");
-            return 1;
+            goto close_sockets;
         }
     } else {
         perror("Error while openning tcp socket\n");
-        return 1;
+        goto close_sockets;
     }
-    return 0;
+    close_sockets: {
+        close(socket_desc);
+        close(client_sock);
+        return 0;
+    }
 }
