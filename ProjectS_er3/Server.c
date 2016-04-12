@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
         if(bind(socket_desc, (struct sockaddr*) &server, sizeof(server)) != IS_ERROR) {
 			if(listen(socket_desc, 9) != IS_ERROR) {
 				addr_len = sizeof(struct sockaddr_in);
-				client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
+				client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &addr_len);
 				if(client_sock != IS_ERROR) {
 					while((read_size = recv(client_sock, client_message, SENDING_MESG_LENGTH, 0)) > 0) {
 						if(argv[1][0] == 'a') {

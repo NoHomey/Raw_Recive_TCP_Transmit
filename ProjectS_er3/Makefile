@@ -1,4 +1,4 @@
-sniffer: rm_sniffer
+sniffer: rm_sniffer listner
 	gcc Sniffer.c -o sniffer && ./sniffer
 
 server: rm_server
