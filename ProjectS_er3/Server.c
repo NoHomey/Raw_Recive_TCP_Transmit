@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv) {
     char client_message[SENDING_MESG_LENGTH];
-    int socket_desc, client_sock, c, read_size;
+    int socket_desc, client_sock, addr_len, read_size;
     struct sockaddr_in server, client;
     socket_desc = socket(AF_INET, SOCK_STREAM, 0);
     if(socket_desc != IS_ERROR) {
@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
         server.sin_port = htons(SERVER_SOCKET_PORT);
         if(bind(socket_desc, (struct sockaddr*) &server, sizeof(server)) != IS_ERROR) {
 			if(listen(socket_desc, 9) != IS_ERROR) {
-				c = sizeof(struct sockaddr_in);
+				addr_len = sizeof(struct sockaddr_in);
 				client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
 				if(client_sock != IS_ERROR) {
 					while((read_size = recv(client_sock, client_message, SENDING_MESG_LENGTH, 0)) > 0) {

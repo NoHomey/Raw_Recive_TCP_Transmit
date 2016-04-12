@@ -20,7 +20,7 @@ int main(void) {
         server.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
         server.sin_family = AF_INET;
         server.sin_port = htons(SERVER_SOCKET_PORT);
-        if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) >= 0) {
+        if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) != IS_ERROR) {
             for(i = 0; i < ULONG_MAX; ++i) {
                 if(send(sock, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
                     sleep(1);
