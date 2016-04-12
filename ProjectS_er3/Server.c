@@ -17,17 +17,21 @@ int main(void) {
         server.sin_addr.s_addr = INADDR_ANY;
         server.sin_port = htons(SERVER_SOCKET_PORT);
         if(bind(socket_desc, (struct sockaddr*) &server, sizeof(server)) != IS_ERROR) {
-            listen(socket_desc, 3);
-            c = sizeof(struct sockaddr_in);
-            client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
-            if(client_sock != IS_ERROR) {
-                while((read_size = recv(client_sock, client_message, SENDING_MESG_LENGTH, 0)) > 0) {
-                    write(client_sock, client_message, SENDING_MESG_LENGTH);
-                }
-            } else {
-                perror("Error while accepting socket\n");
-                goto close_sockets;
-            }
+			if(listen(socket_desc, 9) != IS_ERROR) {
+				c = sizeof(struct sockaddr_in);
+				client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
+				if(client_sock != IS_ERROR) {
+					while((read_size = recv(client_sock, client_message, SENDING_MESG_LENGTH, 0)) > 0) {
+						write(client_sock, client_message, SENDING_MESG_LENGTH);
+					}
+				} else {
+					perror("Error while accepting socket\n");
+					goto close_sockets;
+				}
+			} else {
+				perror("Error while listening on socket\n");
+	            goto close_sockets;
+			}
         } else {
             perror("Error while binding socket\n");
             goto close_sockets;

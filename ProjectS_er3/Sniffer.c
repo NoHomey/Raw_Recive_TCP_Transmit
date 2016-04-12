@@ -25,35 +25,41 @@ int main(void) {
     int sock_addr_size = sizeof(struct sockaddr);
     unsigned char* buffer = (unsigned char*) malloc(SOCKET_MESG_LENGTH);
     unsigned long int i;
+	int conn;
     int sock_raw = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
     int sock_tcp = socket(AF_INET, SOCK_STREAM, 0);
     server.sin_addr.s_addr = inet_addr(SERVER_IP_ADDR);
     server.sin_family = AF_INET;
     server.sin_port = htons(SERVER_SOCKET_PORT);
-    if((sock_raw != IS_ERROR) && (sock_tcp != IS_ERROR) && (connect(sock_tcp, (struct sockaddr*) &server, sizeof(struct sockaddr_in)) != IS_ERROR)) {
-        for(i = 0; i < ULONG_MAX; ++i) {
-            if(recvfrom(sock_raw, buffer, SOCKET_MESG_LENGTH, 0, &sock_addr, (socklen_t*) &sock_addr_size) != IS_ERROR) {
-                ip_header = ((struct iphdr*) (buffer + sizeof(struct ethhdr)));
-                source.sin_addr.s_addr = ip_header->saddr;
-                //puts(inet_ntoa(source.sin_addr));
-                if(strcmp(inet_ntoa(source.sin_addr), WANTED_SENDER_IP_ADDR) == 0) {
-                    if(send(sock_tcp, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
-                        if(recv(sock_tcp, server_reply, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
-                            puts(server_reply);
-                        } else {
-                            perror("Error while reciving from server\n");
-                            goto close_sockets;
-                        }
-                    } else {
-                        perror("Error while sending to server\n");
-                        goto close_sockets;
-                    }
-                }
-            } else {
-                perror("Error while sniffing ips\n");
-                goto close_sockets;
-            }
-        }
+	conn = connect(sock_tcp, (struct sockaddr*) &server, sizeof(struct sockaddr_in));
+    if((sock_raw != IS_ERROR) && (sock_tcp != IS_ERROR) && (conn != IS_ERROR)) {
+		if(listen(sock_raw, 9)) {
+			for(i = 0; i < ULONG_MAX; ++i) {
+				if(recvfrom(sock_raw, buffer, SOCKET_MESG_LENGTH, 0, &sock_addr, (socklen_t*) &sock_addr_size) != IS_ERROR) {
+					ip_header = ((struct iphdr*) (buffer + sizeof(struct ethhdr)));
+					source.sin_addr.s_addr = ip_header->saddr;
+					if(strcmp(inet_ntoa(source.sin_addr), WANTED_SENDER_IP_ADDR) == 0) {
+						if(send(sock_tcp, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
+							if(recv(sock_tcp, server_reply, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
+								puts(server_reply);
+							} else {
+								perror("Error while reciving from server\n");
+								goto close_sockets;
+							}
+						} else {
+							perror("Error while sending to server\n");
+							goto close_sockets;
+						}
+					}
+				} else {
+					perror("Error while sniffing ips\n");
+					goto close_sockets;
+				}
+			}
+		} else {
+			perror("Error while listening on socket\n");
+	        goto close_sockets;
+		}
     } else {
         perror("Error while openning sockets or connecting to server\n");
         goto close_sockets;
