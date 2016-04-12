@@ -34,15 +34,15 @@ int main(void) {
 	conn = connect(sock_tcp, (struct sockaddr*) &server, sizeof(struct sockaddr_in));
 	if(scok_raw == IS_ERROR) {
 		perror("Error while openning raw socket\n");
-        goto close_sockets;
+        	goto close_sockets;
 	}
 	if(scok_tcp == IS_ERROR) {
 		perror("Error while openning tcp socket\n");
-        goto close_sockets;
+        	goto close_sockets;
 	}
 	if(conn == IS_ERROR) {
 		perror("Error while connecting to server\n");
-        goto close_sockets;
+        	goto close_sockets;
 	}
 	if(listen(sock_raw, 9) == IS_ERROR) {
 		perror("Error while listening on socket\n");
