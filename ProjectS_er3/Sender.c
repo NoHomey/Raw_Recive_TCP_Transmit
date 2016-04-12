@@ -11,34 +11,31 @@
 #define IS_ERROR -1
 
 int main(void) {
-    int sock;
-    unsigned long int i;
-    struct sockaddr_in server;
-    char message[] = SENDING_MESG_TEXT;
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if(sock != IS_ERROR) {
-        server.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
-        server.sin_family = AF_INET;
-        server.sin_port = htons(SERVER_SOCKET_PORT);
-        if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) != IS_ERROR) {
-            for(i = 0; i < ULONG_MAX; ++i) {
-                if(send(sock, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
-                    sleep(1);
-                } else {
-                    perror("Error while sending to sniffer\n");
-                    goto close_socket;
-                }
-            }
-        }  else {
-            perror("Error while connecting to sniffer\n");
-            goto close_socket;
-        }
-    }  else {
-        perror("Error while openning tcp socket\n");
-        goto close_socket;
-    }
-    close_socket: {
-        close(sock);
-        return 0;
-    }
+	int sock;
+	unsigned long int i;
+	struct sockaddr_in server;
+	char message[] = SENDING_MESG_TEXT;
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if(sock == IS_ERROR) {
+		perror("Error while openning tcp socket\n");
+		goto close_socket;
+	}
+	server.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
+	server.sin_family = AF_INET;
+	server.sin_port = htons(SERVER_SOCKET_PORT);
+	if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) == IS_ERROR) {
+		perror("Error while connecting to sniffer\n");
+		goto close_socket;
+	}
+	for(i = 0; i < ULONG_MAX; ++i) {
+		if(send(sock, message, SENDING_MESG_LENGTH, 0) == IS_ERROR) {
+			perror("Error while sending to sniffer\n");
+			goto close_socket;
+		}
+		sleep(1);
+	}
+	close_socket: {
+		close(sock);
+		return 0;
+	}
 }
