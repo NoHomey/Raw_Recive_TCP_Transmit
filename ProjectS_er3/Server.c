@@ -2,14 +2,17 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "Constants.h"
+
+#define SERVER_SOCKET_PORT 8080
+#define SENDING_MESG_LENGTH 15
+#define IS_ERROR -1
 
 int main(void) {
     char client_message[SENDING_MESG_LENGTH];
     int socket_desc, client_sock, c, read_size;
     struct sockaddr_in server, client;
     socket_desc = socket(AF_INET, SOCK_STREAM, 0);
-    if(socket_desc != -1) {
+    if(socket_desc != IS_ERROR) {
         server.sin_family = AF_INET;
         server.sin_addr.s_addr = INADDR_ANY;
         server.sin_port = htons(SERVER_SOCKET_PORT);
