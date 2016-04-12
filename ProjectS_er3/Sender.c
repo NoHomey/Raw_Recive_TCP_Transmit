@@ -6,8 +6,8 @@
 
 #define SERVER_SOCKET_PORT 8080
 #define SNIFFER_IP_ADDR "192.168.0.104"
-#define SENDING_MESG_TEXT "Hellow Sniffer!"
-#define SENDING_MESG_LENGTH 16
+#define SENDING_MESG_TEXT "Hellow Snif!!!"
+#define SENDING_MESG_LENGTH 15
 #define IS_ERROR -1
 
 int main(void) {
@@ -20,7 +20,7 @@ int main(void) {
         server.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
         server.sin_family = AF_INET;
         server.sin_port = htons(SERVER_SOCKET_PORT);
-        if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) != IS_ERROR) {
+        if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) >= 0) {
             for(i = 0; i < ULONG_MAX; ++i) {
                 if(send(sock, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
                     sleep(1);

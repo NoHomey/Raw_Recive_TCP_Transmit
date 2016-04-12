@@ -35,7 +35,7 @@ int main(void) {
             if(recvfrom(sock_raw, buffer, SOCKET_MESG_LENGTH, 0, &sock_addr, (socklen_t*) &sock_addr_size) != IS_ERROR) {
                 ip_header = ((struct iphdr*) (buffer + sizeof(struct ethhdr)));
                 source.sin_addr.s_addr = ip_header->saddr;
-                puts(inet_ntoa(source.sin_addr));
+                //puts(inet_ntoa(source.sin_addr));
                 if(strcmp(inet_ntoa(source.sin_addr), WANTED_SENDER_IP_ADDR) == 0) {
                     if(send(sock_tcp, message, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
                         if(recv(sock_tcp, server_reply, SENDING_MESG_LENGTH, 0) != IS_ERROR) {
