@@ -6,6 +6,8 @@
 
 #define SERVER_SOCKET_PORT 8080
 #define SNIFFER_IP_ADDR "192.168.0.104"
+#define SENDING_MESG_TEXT "Hellow Sniffer!"
+#define SENDING_MESG_LENGTH 16
 #define IS_ERROR -1
 
 int main(void) {
