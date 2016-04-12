@@ -2,7 +2,10 @@ sniffer: rm_sniffer
 	gcc Sniffer.c -o sniffer && ./sniffer
 
 server: rm_server
-	gcc Server.c -o server && ./server
+	gcc Server.c -o server && ./server a
+
+listner: rm_server
+	gcc Server.c -o server && ./server n
 
 sender: rm_sender
 	gcc Sender.c -o sender && ./sender

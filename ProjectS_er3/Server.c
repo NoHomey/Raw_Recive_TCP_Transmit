@@ -7,7 +7,7 @@
 #define SENDING_MESG_LENGTH 15
 #define IS_ERROR -1
 
-int main(void) {
+int main(int argc, char** argv) {
     char client_message[SENDING_MESG_LENGTH];
     int socket_desc, client_sock, c, read_size;
     struct sockaddr_in server, client;
@@ -22,7 +22,9 @@ int main(void) {
 				client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
 				if(client_sock != IS_ERROR) {
 					while((read_size = recv(client_sock, client_message, SENDING_MESG_LENGTH, 0)) > 0) {
-						write(client_sock, client_message, SENDING_MESG_LENGTH);
+						if(argv[1][0] == 'a') {
+							write(client_sock, client_message, SENDING_MESG_LENGTH);
+						}
 					}
 				} else {
 					perror("Error while accepting socket\n");
