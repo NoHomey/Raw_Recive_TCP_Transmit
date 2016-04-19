@@ -6,36 +6,37 @@
 
 #define SERVER_SOCKET_PORT 8080
 #define SNIFFER_IP_ADDR "192.168.0.104"
-#define SENDING_MESG_TEXT "Hellow Snif!!!"
-#define SENDING_MESG_LENGTH 15
+#define SENDING_MSG_TEXT "Hellow Snif!!!"
+#define SENDING_MSG_LENGTH 15
 #define IS_ERROR -1
 
 int main(void) {
-	int sock;
-	unsigned long int i;
-	struct sockaddr_in server;
-	char message[] = SENDING_MESG_TEXT;
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if(sock == IS_ERROR) {
-		perror("Error while openning tcp socket\n");
-		goto close_socket;
-	}
-	server.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
-	server.sin_family = AF_INET;
-	server.sin_port = htons(SERVER_SOCKET_PORT);
-	if(connect(sock, (struct sockaddr*) &server , sizeof(struct sockaddr_in)) == IS_ERROR) {
-		perror("Error while connecting to sniffer\n");
-		goto close_socket;
-	}
-	for(i = 0; i < ULONG_MAX; ++i) {
-		if(send(sock, message, SENDING_MESG_LENGTH, 0) == IS_ERROR) {
-			perror("Error while sending to sniffer\n");
-			goto close_socket;
-		}
-		sleep(1);
-	}
-	close_socket: {
-		close(sock);
-		return 0;
-	}
+    int sender_sock;
+    unsigned long int i;
+    struct sockaddr_in sniffer_addr;
+    char message[] = SENDING_MSG_TEXT;
+    sender_sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sender_sock == IS_ERROR) {
+        perror("Error while opening tcp socket\n");
+        goto close_socket;
+    }
+    sniffer_addr.sin_addr.s_addr = inet_addr(SNIFFER_IP_ADDR);
+    sniffer_addr.sin_family = AF_INET;
+    sniffer_addr.sin_port = htons(SERVER_SOCKET_PORT);
+    if (connect(sender_sock, (struct sockaddr *) &sniffer_addr, sizeof(struct sockaddr_in)) == IS_ERROR) {
+        perror("Error while connecting to sniffer\n");
+        goto close_socket;
+    }
+    for (i = 0; i < ULONG_MAX; ++i) {
+        if (send(sender_sock, message, SENDING_MSG_LENGTH, 0) == IS_ERROR) {
+            perror("Error while sending to sniffer\n");
+            goto close_socket;
+        }
+        sleep(1);
+    }
+    close_socket:
+    {
+        close(sender_sock);
+        return 0;
+    }
 }

@@ -5,8 +5,8 @@
 #include "TCP_SOCKET_COMMON.h"
  
 int main(void) {
-    char client_message[MESG_LENGTH];
-    int socket_desc, client_sock, c, read_size;
+    char client_message[MSG_LENGTH];
+    int socket_desc, client_sock, c;
     struct sockaddr_in server, client;
     socket_desc = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_desc != -1) {
@@ -18,8 +18,8 @@ int main(void) {
             c = sizeof(struct sockaddr_in);
             client_sock = accept(socket_desc, (struct sockaddr*) &client, (socklen_t*) &c);
             if (client_sock >= 0) {
-                while((read_size = recv(client_sock, client_message, MESG_LENGTH, 0)) > 0) {
-                    write(client_sock, client_message, MESG_LENGTH);
+                while(recv(client_sock, client_message, MSG_LENGTH, 0) > 0) {
+                    write(client_sock, client_message, MSG_LENGTH);
                 }
             }
         }

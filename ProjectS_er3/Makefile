@@ -1,14 +1,14 @@
 sniffer: rm_sniffer
-	gcc Sniffer.c -o sniffer && ./sniffer
+	gcc Sniffer.c -Wall -o sniffer && ./sniffer
 
 server: rm_server
-	gcc Server.c -o server && ./server a
+	gcc Server.c -Wall -o server && ./server a
 
-listner: rm_server
-	gcc Server.c -o server && ./server n
+listener: rm_server
+	gcc Server.c -Wall -o server && ./server n
 
 sender: rm_sender
-	gcc Sender.c -o sender && ./sender
+	gcc Sender.c -Wall -o sender && ./sender
 
 rm_server:
 	rm -f server
@@ -18,3 +18,6 @@ rm_sniffer:
 
 rm_sender:
 	rm -f sender
+
+clean:
+	rm -f server sniffer sender *~
