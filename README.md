@@ -8,4 +8,4 @@ The task for the homework was to:
 
 The code for the given homework is located in `Project` and in `Socket_Playground` is located the code that was used to play with the `Linux Sokcets API` to learn the basics of it. 
 
-Homeworks was done by me @NoHomey and Ilyan Germanov @ILIYANGERMANOV.
+Homeworks was done by me <Ivo Stratev @NoHomey> and <Ilyan Germanov @ILIYANGERMANOV>.
