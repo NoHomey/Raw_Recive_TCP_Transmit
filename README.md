@@ -1,5 +1,5 @@
 # raw-recive-tcp-transmit
-Public repository for a school homewrok for the `Assembly programing practice` course in ***ELSYS (TUES) - Technological shcool "Electronic systems"***.
+Public repository for a school homework for the `Assembly programing practice` course in ***ELSYS (TUES) - Technological shcool "Electronic systems"***.
 
 The task for the homework was to:
 
